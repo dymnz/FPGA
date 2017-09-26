@@ -1,2 +1,0 @@
-module mux_2 (iX, iY, iS, oM);
-
