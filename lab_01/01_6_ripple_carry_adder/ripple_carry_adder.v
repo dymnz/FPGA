@@ -31,3 +31,36 @@ module ripple_carry_adder #(parameter WIDTH = 4) (A, B, Ci, S, Co);
 	endgenerate
 
 endmodule	
+
+//////////////////////////////////
+module ripple_carry_adder_tb();
+
+	reg Ci;
+	reg [3:0] A, B;
+	
+	wire Co;
+	wire [3:0] S;
+	
+	ripple_carry_adder #(.WIDTH(4)) (
+		.A(A), 
+		.B(B), 
+		.Ci(Ci), 
+		.S(S), 
+		.Co(Co)
+	);
+	
+	initial begin
+		for (A = 0; A < 16; A = A + 1) begin
+			for (B = 0; B < 16; B = B + 1) begin
+				#10
+				if ({Co, S} != A + B) begin
+					$display("%h + %h != %h:%h", 
+						A, B, Co, S);
+				end
+			end
+		end
+		$finish;
+	end
+	
+
+endmodule
