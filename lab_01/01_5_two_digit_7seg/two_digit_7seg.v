@@ -74,7 +74,8 @@ module two_digit_7seg_tb();
 		
 	
 	initial begin
-		for (V=0; V<16; V=V+1) begin
+		V = 0;
+		repeat (16) begin
 			#10
 			if (HEX0 != t_HEX[V%10]) begin
 				$display("!!!! HEX0 Test %d error\n", V);
@@ -86,6 +87,7 @@ module two_digit_7seg_tb();
 				$display("!!!! HEX1 <10 Test %d error\n", V);
 			end
 			
+			V = V + 1;
 		end
 		$finish;
 	end
