@@ -59,12 +59,14 @@ module hex_decoder_tb();
 	);
 		
 	initial begin
-		for (SW=0; SW<16; SW=SW+1) begin
+		SW = 0;
+		repeat (16) begin
 			#10
 			if (HEX0 != t_HEX[SW])
 				$display("!!!! Test %d error %h:%h \n", SW, HEX0, t_HEX[SW]);
 			else
 				$display("Passed Test %d\n", SW);
+			SW = SW + 1;
 		end
 		$finish;
 	end	
