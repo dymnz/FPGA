@@ -30,11 +30,13 @@ module full_adder_tb();
 	);
 	
 	initial begin
-		for(ABCi = 0; ABCi < 16; ABCi = ABCi + 1) begin
+		ABCi = 0;
+		repeat (7) begin
 			#10
 			if ( {Co, S} != ABCi[2] + ABCi[1] + ABCi[0]) begin
 				$display("Error %h", ABCi);
 			end
+			ABCi = ABCi + 1;
 		end
 		$finish;
 	end

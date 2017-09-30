@@ -59,7 +59,7 @@ module hex_decoder_tb();
 	);
 		
 	initial begin
-		for (SW=0; SW<16; SW=SW+1) begin
+		for (SW=0; SW>0; SW=SW+1) begin
 			#10
 			if (HEX0 != t_HEX[SW])
 				$display("!!!! Test %d error %h:%h \n", SW, HEX0, t_HEX[SW]);
