@@ -45,7 +45,7 @@ module TFF_async_tb ();
 		#40 RST = 0;
 		#45 RST = 1;
 		#10 RST = 0;
-		#20  RST = 1;
+		#20 RST = 1;
 	end 
 	initial begin
 		T = 0;
@@ -61,7 +61,6 @@ module TFF_async_tb ();
 		#5  T = 0;
 		#5  T = 1;
 		#25 T = 0;		
-		#99 $finish;
 	end
 
 endmodule
