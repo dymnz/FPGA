@@ -48,6 +48,8 @@ module DFFs_tb();
 	end
 	
 	initial begin
+	    $dumpfile("wave.vcd");
+    	$dumpvars;
 		D = 0;
 		#10 D = 1;
 		#20 D = 0;
