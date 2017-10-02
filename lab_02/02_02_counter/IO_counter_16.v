@@ -1,12 +1,14 @@
 module IO_counter_16 #(parameter WIDTH = 16)(SW, KEY, HEX0, HEX1, HEX2, HEX3);
 
 	input [8:0] SW;
+	input [3:0] KEY;
 	output [6:0] HEX0, HEX1, HEX2, HEX3;
 
 	wire [WIDTH-1:0] COUNT;
 	wire RST = SW[0];
 	wire ENB = SW[1];
-    wire CLK = 
+	wire CLK = KEY[0];
+
 
 	counter #(.WIDTH(WIDTH)) DUT (
 		.CLK(CLK),
