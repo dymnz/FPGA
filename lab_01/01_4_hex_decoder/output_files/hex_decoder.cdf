@@ -1,4 +1,4 @@
-/* Quartus II 64-Bit Version 13.1.4 Build 182 03/12/2014 SJ Web Edition */
+/* Quartus II 64-Bit Version 13.1.0 Build 162 10/23/2013 SJ Full Version */
 JedecChain;
 	FileRevision(JESD32A);
 	DefaultMfr(6E);
@@ -6,7 +6,7 @@ JedecChain;
 	P ActionCode(Ign)
 		Device PartName(SOCVHPS) MfrSpec(OpMask(0));
 	P ActionCode(Cfg)
-		Device PartName(5CSEMA5F31) Path("E:/C++/FPGA/lab_01/hex_decoder/output_files/") File("hex_decoder.sof") MfrSpec(OpMask(1));
+		Device PartName(5CSEMA5F31) Path("D:/0660004/FPGA/lab_01/01_4_hex_decoder/output_files/") File("hex_decoder.sof") MfrSpec(OpMask(1));
 
 ChainEnd;
 

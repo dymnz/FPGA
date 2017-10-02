@@ -3,7 +3,7 @@
 	
 	test passed
 */
-module hex_decoder(SW, HEX);
+module hex_decoder_top(SW, HEX);
 	input	[3:0]	SW;
 	output [6:0] HEX;
 
@@ -26,7 +26,29 @@ endmodule
 
 //////////////////////////////////////////////////////////////////////
 
+module hex_decoder(SW, HEX0);
+	input	[3:0]	SW;
+	output [6:0] HEX0;
 
+	wire A = SW[0];
+	wire B = SW[1];
+	wire C = SW[2]; 
+	wire D = SW[3];
+
+	wire common = D&B | D&C;
+
+	assign HEX0[0] = common | C&~B&~A | ~D&~C&~B&A;
+	assign HEX0[1] = common | C&~B&A | C&B&~A;
+	assign HEX0[2] = common | ~C&B&~A;
+	assign HEX0[3] = common | C&~B&~A | C&B&A | ~D&~C&~B&A;
+	assign HEX0[4] = common | A | C&~B;
+	assign HEX0[5] = common | B&A | ~D&~C&A | ~C&B&~A;
+	assign HEX0[6] = common | ~D&~C&~B | C&B&A;
+
+endmodule
+
+
+//////////////////////////////////////////////////////////////////////
 module hex_decoder_tb();
  
 	reg [3:0] SW;

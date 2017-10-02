@@ -30,8 +30,8 @@ module IO_BCD_adder(SW, LEDR, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5);
 	// Show A on HEX32
 	two_digit_7seg segA (
 		.SW(A),
-		.HEX0(HEX3), 
-		.HEX1(HEX2));	
+		.HEX0(HEX2), 
+		.HEX1(HEX3));	
 	
 	// Show >10 error
 	comparator compB (
@@ -48,7 +48,7 @@ module IO_BCD_adder(SW, LEDR, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5);
 	BCD_adder BCD (
 		.A(A), 
 		.B(B), 
-		.Ci(Ci), 
+		.Ci(Cin), 
 		.Sum(Sum),
 		.Co(Co));
 	
