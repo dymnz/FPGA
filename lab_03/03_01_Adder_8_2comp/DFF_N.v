@@ -2,11 +2,11 @@
 	N-bit D-FF posedge clk, negedge rst
 */
 
-module DFF_N module counter #(parameter WIDTH = 8) (CLK, RST, D, Q)
+module DFF_N #(parameter WIDTH = 8) (CLK, RST, D, Q);
 
 	input CLK, RST;
 	input [WIDTH-1:0] D;
-	output [WIDTH-1:0] Q;
+	output reg [WIDTH-1:0] Q;
 	
 	always @ (posedge CLK, negedge RST) begin
 		if (~RST) begin

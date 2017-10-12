@@ -4,39 +4,39 @@
 	test passed
 */
 
-module full_adder(A, B, Ci, S, Co);
-	input A, B, Ci;
-	output S, Co;
+module full_adder(A, B, CI, S, CO);
+	input A, B, CI;
+	output S, CO;
 	
 	wire AxB = (A^B);
 	
-	assign S = AxB^Ci;
-	assign Co = (AxB&Ci) | (A&B);
+	assign S = AxB^CI;
+	assign CO = (AxB&CI) | (A&B);
 	
 endmodule
 
 //////////////////////////////////////////
 
 module full_adder_tb();
-	reg [2:0] ABCi;
-	wire S, Co;
+	reg [2:0] ABCI;
+	wire S, CO;
 	
 	full_adder DUT (
-		.A(ABCi[2]),
-		.B(ABCi[1]),
-		.Ci(ABCi[0]),
+		.A(ABCI[2]),
+		.B(ABCI[1]),
+		.CI(ABCI[0]),
 		.S(S),
-		.Co(Co)
+		.CO(CO)
 	);
 	
 	initial begin
-		ABCi = 0;
+		ABCI = 0;
 		repeat (7) begin
 			#10
-			if ( {Co, S} != ABCi[2] + ABCi[1] + ABCi[0]) begin
-				$display("Error %h", ABCi);
+			if ( {CO, S} != ABCI[2] + ABCI[1] + ABCI[0]) begin
+				$display("Error %h", ABCI);
 			end
-			ABCi = ABCi + 1;
+			ABCI = ABCI + 1;
 		end
 		$finish;
 	end
