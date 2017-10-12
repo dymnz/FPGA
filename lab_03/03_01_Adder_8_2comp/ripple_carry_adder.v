@@ -3,7 +3,7 @@
 	
 	test passed
 */
-module ripple_carry_adder #(parameter WIDTH = 4) (A, B, Ci, S, Co);
+module ripple_carry_adder #(parameter WIDTH = 8) (A, B, Ci, S, Co);
 
 	input Ci;
 	input [WIDTH-1:0] A, B;
