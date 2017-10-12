@@ -10,6 +10,8 @@ module One_hertz_module(CLK_50M, RST, CLK_1);
 	
 	reg [27:0] counter;
 	
+	initial counter <= 0;
+
 	always@(posedge CLK_50M or posedge RST) begin
 		if (RST == 1'b1) begin
 			counter <= 0;

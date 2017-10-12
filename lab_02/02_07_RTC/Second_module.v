@@ -21,6 +21,7 @@ module Second_module (CLK, RST, COUNT, CARRY);
 	always @ (posedge CLK or posedge RST) begin
 		if (RST) begin
 			COUNT <= 0;
+			CARRY <= 0;
 		end else if (COUNT == 0) begin
 			COUNT <= COUNT + 1;
 			CARRY <= 0;

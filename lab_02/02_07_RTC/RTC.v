@@ -42,3 +42,41 @@ module RTC(SW, CLOCK_50, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5);
 	hex_decoder_top h_5(HEX_input[5], HEX5);
 
 endmodule
+
+
+module RTC_tb();
+
+	reg CLOCK_50;
+	reg [9:0] SW;
+	wire [6:0] HEX0, HEX1, HEX2, HEX3, HEX4, HEX5;
+	
+	wire [3:0] BCD_0, BCD_1;
+	wire [5:0] count_set;
+	wire [5:0] hour_count, min_count, sec_count;
+	
+	RTC DUT(SW, CLOCK_50, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5);
+	
+	initial begin	
+		CLOCK_50 = 0;
+		SW = 10'b0000000000;
+		// Set min to 11
+		#10	SW = 10'b0000010001;
+		#10	SW[9] = 0;
+		#10	SW[8] = 1;
+		#10	SW[8] = 0;
+		
+		// Set hr to 22
+		#10	SW = 10'b000100010;
+		#10	SW[9] = 1;
+		#10	SW[8] = 1;
+		#10	SW[8] = 0;
+		
+		forever begin
+			#5	CLOCK_50 = ~CLOCK_50;
+		end
+		#1000	$finish;
+	end
+	
+
+	
+endmodule

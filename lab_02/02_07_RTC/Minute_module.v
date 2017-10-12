@@ -20,6 +20,7 @@ module Minute_module (CLK, COUNT_SET, RST, COUNT, CARRY);
 	always @ (posedge CLK or posedge RST) begin
 		if (RST) begin
 			COUNT <= COUNT_SET;
+			CARRY <= 0;
 		end else if (COUNT == 0) begin
 			COUNT <= COUNT + 1;
 			CARRY <= 0;
