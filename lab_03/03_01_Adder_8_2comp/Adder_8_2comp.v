@@ -49,7 +49,7 @@ module Adder_8_2comp (SW, KEY, LEDR, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5);
 	ripple_carry_adder #(.WIDTH(8)) adder (DFF_A, DFF_B, ZERO, S, CO);
 	
 	// Overflow checker
-	Overflow_check #(.WIDTH(8)) (A, B, S, CO, overflow_flag);
+	Overflow_check #(.WIDTH(8)) (DFF_A, DFF_A, S, CO, overflow_flag);
 	
 
 endmodule
