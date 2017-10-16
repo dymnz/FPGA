@@ -1,3 +1,6 @@
+/*
+	Translate 4-bit data to hex display
+*/
 module Hex_7seg (SW, HEX);
 	input [3:0] SW;
 	output [6:0] HEX;
