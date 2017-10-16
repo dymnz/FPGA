@@ -9,8 +9,7 @@ module Overflow_check #(parameter WIDTH = 8) (A, B, S, CO, FLAG);
 	
 	assign FLAG = 
 				(A[WIDTH-1] & B[WIDTH-1] & ~S[WIDTH-1]) |		// NEG + NEG = POS
-				(~A[WIDTH-1] & ~B[WIDTH-1] & S[WIDTH-1]) |	// POS + POS = NEG
-				CO;	// Carry = Overflow
+				(~A[WIDTH-1] & ~B[WIDTH-1] & S[WIDTH-1]);	// POS + POS = NEG
 endmodule
 
 

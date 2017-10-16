@@ -13,7 +13,7 @@ module AddSub_8_2comp (SW, KEY, LEDR, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5);
 			to_transform_b;
 	
 	assign RST = KEY[0];
-	assign CLK = KEY[1];	
+	assign CLK = ~KEY[1];	
 	assign DFF_A_enable = CLK & ~SW[8];
 	assign DFF_B_enable = CLK & SW[8];
 	assign DATA = SW[7:0];
@@ -39,7 +39,7 @@ module AddSub_8_2comp (SW, KEY, LEDR, HEX0, HEX1, HEX2, HEX3, HEX4, HEX5);
 	
 	// Hex display A
 	Hex_7seg hex_4(DFF_A[3:0], HEX4);	
-	Hex_7seg hex_5(DFF_A[7:4], HEX6);
+	Hex_7seg hex_5(DFF_A[7:4], HEX5);
 	
 	// Hex display B
 	Hex_7seg hex_2(DFF_B[3:0], HEX2);
