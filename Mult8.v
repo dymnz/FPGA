@@ -17,6 +17,7 @@ module Mult8 (SW, KEY, LEDR, HEX0, HEX1, HEX2, HEX3);
 	assign SEL_PROD = KEY[3];
 	
 	assign SEL_AB = SW[8];
+	assign WRITE_ENB = SW[9];
 		
 	Storage storage_inst
 		(CLK, RST, WRITE_ENB, SEL_AB, SEL_A, 

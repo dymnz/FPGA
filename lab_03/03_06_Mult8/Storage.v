@@ -9,10 +9,10 @@ module Storage
 	
 	wire enable_list [3:0]; // Enable for ABCD, respectively
 	
-	assign enable_list[0] = WRITE_ENB	&	~SEL_AB	&	~SEL_A; 	// A
-	assign enable_list[1] = WRITE_ENB	&	~SEL_AB	&	SEL_A;	// B
-	assign enable_list[2] = WRITE_ENB	&	SEL_AB	&	~SEL_A;	// C
-	assign enable_list[3] = WRITE_ENB	&	SEL_AB	&	SEL_A;	// D
+	assign enable_list[0] = CLK & WRITE_ENB	&	~SEL_AB	&	~SEL_A; 	// A
+	assign enable_list[1] = CLK & WRITE_ENB	&	~SEL_AB	&	SEL_A;	// B
+	assign enable_list[2] = CLK & WRITE_ENB	&	SEL_AB	&	~SEL_A;	// C
+	assign enable_list[3] = CLK & WRITE_ENB	&	SEL_AB	&	SEL_A;	// D
 	
 	DFF_N #(.WIDTH(WIDTH)) DFF_A (enable_list[0], RST, DATA, A);
 	DFF_N #(.WIDTH(WIDTH)) DFF_B (enable_list[1], RST, DATA, B);
