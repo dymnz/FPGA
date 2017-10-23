@@ -4,10 +4,11 @@ module FSM8 (SW, KEY, LEDR);
 	input [3:0] KEY;
 	output[9:0] LEDR;
 
-	wire RST, CLK, IN, OUT;
+	wire RST, CLK, IN, OUT, ONE;
 	wire [8:0] state; // State = oDFF
 	wire [8:0] iDFF_list;	// Input of DFF
 	
+	assign ONE = 1'b1;
 	assign RST = SW[0];	
 	assign CLK = KEY[0];
 	
@@ -25,7 +26,9 @@ module FSM8 (SW, KEY, LEDR);
 		F = 9'b000100000,
 		G = 9'b001000000,
 		H = 9'b010000000,
-		I = 9'b100000000;
+		I = 9'b100000000;			
+		
+	assign OUT = (state==E) | (state==I);
 			
 	// RST = 0, reset to state A
 	assign iDFF_list[0] = ~RST;
@@ -50,8 +53,10 @@ module FSM8 (SW, KEY, LEDR);
 	genvar i;
 	generate
 		for (i = 0; i < 9; i = i + 1) begin : DFF_list
-			DFF_N #(.WIDTH(1)) DFF1 (CLK, RST, iDFF_list[i], state[i]);
+			DFF_N #(.WIDTH(1)) DFF1 (CLK, ONE, iDFF_list[i], state[i]);
 		end
 	endgenerate
+	
+	
 		
 endmodule		
