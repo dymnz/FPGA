@@ -52,7 +52,7 @@ module FSM8 (SW, KEY, LEDR);
 	genvar i;
 	generate
 		for (i = 0; i < 9; i = i + 1) begin : DFF_list
-			DFF_POS #(.WIDTH(1)) DFF1 (CLK, iDFF_list[i], state[i]);
+			DFF_POS DFF1 (CLK, iDFF_list[i], state[i]);
 		end
 	endgenerate
 	
