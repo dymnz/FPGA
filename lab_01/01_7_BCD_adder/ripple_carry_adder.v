@@ -31,7 +31,12 @@ module ripple_carry_adder #(parameter WIDTH = 4) (A, B, Ci, S, Co);
 			  .Ci(Co_wire[i-1]),
 			  .S(S[i]),
 			  .Co(Co_wire[i])
-			);
+			);#### 200Hz 10mV in
+* Signal measured in CH2, not quite accurate in a range of N mV
+* Best output DC: 2.3V / Vpp: 4V
+* After HPF: DC: 2mV / Vpp: 30mV
+* After Inv amp: DC: -13mV / Vpp: 76mV
+
 		end
 	endgenerate
 
