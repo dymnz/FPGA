@@ -11,7 +11,7 @@ module FSM_counter (SW, KEY, HEX0);
 	assign RST = SW[0];	
 	assign CLK = KEY[0];
 	
-	assign W = SW[1:0];
+	assign W = SW[2:1];
 		
 	// State table
 	parameter 
