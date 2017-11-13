@@ -5,8 +5,8 @@ module Count_32 (CLK, RST, COUNT);
 	
 	initial COUNT = 0;
 	
-	always @ (posedge CLK or posedge RST) begin
-		if (RST) begin
+	always @ (posedge CLK or negedge RST) begin
+		if (~RST) begin
 			COUNT <= 0;
 		end else if (COUNT < 32) begin
 			COUNT <= COUNT + 1;

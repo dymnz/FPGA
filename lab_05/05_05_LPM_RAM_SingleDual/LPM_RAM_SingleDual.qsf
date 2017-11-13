@@ -707,6 +707,6 @@ set_global_assignment -name VERILOG_FILE DFF_N.v
 set_global_assignment -name VERILOG_FILE One_hertz_module.v
 set_global_assignment -name VERILOG_FILE Count_32.v
 set_global_assignment -name MIF_FILE LPM_RAM_SingleDual.mif
-set_global_assignment -name QIP_FILE LPM_Single.qip
 set_global_assignment -name VERILOG_FILE LPM_RAM_SingleDual.v
+set_global_assignment -name QIP_FILE LPM_Single.qip
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

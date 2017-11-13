@@ -12,8 +12,8 @@ module One_hertz_module(CLK_50M, RST, CLK_1);
 	
 	initial counter <= 0;
 
-	always@(posedge CLK_50M or posedge RST) begin
-		if (RST == 1'b1) begin
+	always@(posedge CLK_50M or negedge RST) begin
+		if (~RST) begin
 			counter <= 0;
 			CLK_1 <= 0;
 		end else begin
