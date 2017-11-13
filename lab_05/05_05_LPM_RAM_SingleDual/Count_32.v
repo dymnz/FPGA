@@ -8,9 +8,9 @@ module Count_32 (CLK, RST, COUNT);
 	always @ (posedge CLK or negedge RST) begin
 		if (~RST) begin
 			COUNT <= 0;
-		end else if (COUNT < 32) begin
+		end else if (COUNT < 31) begin
 			COUNT <= COUNT + 1;
-		end else if (COUNT == 32) begin
+		end else if (COUNT == 31) begin
 			COUNT <= 0;
 		end		
 	end
