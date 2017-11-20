@@ -66,13 +66,14 @@ module Control_Unit (
 		IR_ENB = 0;
 		DIN_MUX_SEL = 0;
 		G_MUX_SEL = 0;
+		REG_MUX_SEL = 0;
 		register_mux_sel_list = 0;
 		ADD_SUB_SIG = 1;
 		register_enable_list = 0;
 		REG_A_ENB = 0;
 		REG_G_ENB = 0;
 		DONE_SIG = 0;
-		TIME_STEP_CLR = 0;
+		TIME_STEP_CLR = 0;		
 	end
 
 	always @(
@@ -88,6 +89,7 @@ module Control_Unit (
 		IR_ENB = 0;
 		DIN_MUX_SEL = 0;
 		G_MUX_SEL = 0;
+		REG_MUX_SEL = 0;
 		register_mux_sel_list = 0;
 		ADD_SUB_SIG = 1;
 		register_enable_list = 0;
