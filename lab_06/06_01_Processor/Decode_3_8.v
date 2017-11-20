@@ -8,7 +8,7 @@ module Decode_3_8 (ENB, original, extended);
 		if (ENB == 1'b1) begin
 			extended	= 8'b00000001 << original;
 		end else begin
-			extended = 8'b0;
+			extended = 8'b00000000;
 		end		
 	end
 

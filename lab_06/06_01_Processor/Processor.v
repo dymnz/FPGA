@@ -1,86 +1,130 @@
-module Processor (Din, RST, CLK, RUN_SIG, DONE_SIG, Bus);
+module Processor (din, RSTn, CLK, RUN_SIG, DONE_SIG);
 	parameter DATA_WIDTH = 8;
 	parameter REG_COUNT = 8;
+	parameter REG_COUNT_BIT_WIDTH = 3;	// 2^3 = 8
+	parameter INSTRUCTION_LENGTH = 8;
 	
-	input [DATA_WIDTH-1:0] Din;
-	input RST, CLK, RUN_SIG;
+	
+	input [DATA_WIDTH-1:0] din;
+	input RSTn, CLK, RUN_SIG;
 	output DONE_SIG;
-	output [DATA_WIDTH-1:0] Bus;
 
-////////////////////////////////////////////////////////////////////////	
-	
-	wire [1:0] time_step_count, operation;
-	wire [2:0] operand[1:0];
-	wire [7:0] instruction, operand_reg[1:0];
-		
-	// Register[7:0]
-	wire [REG_COUNT-1:0] register_enable_list;
-	wire [DATA_WIDTH-1:0] register_data_list[REG_COUNT-1:0];
-	
-	// Register A and G
-	wire regA_ENB, regG_ENB;
-	wire [DATA_WIDTH-1:0] regA_data_in, regA_data_out,
-								 regG_data_in, regG_data_out;
-								 
-	// Add-Sub
+//////////////// Control Unit ////////////////
+	wire [INSTRUCTION_LENGTH-1:0] instruction;
+	wire [1:0] time_step_count;
+
+	wire IR_ENB;
+
+	wire DIN_MUX_SEL, G_MUX_SEL;
+	wire [REG_COUNT_BIT_WIDTH-1:0] register_mux_sel_list;	// Mux->Bus data sel
+
 	wire ADD_SUB_SIG;
-	wire [DATA_WIDTH-1:0] add_sub_A, add_sub_B, add_sub_out;								 
+	wire TIME_STEP_CLR;
+
+	wire [REG_COUNT-1:0] register_enable_list;
+	wire REG_A_ENB, REG_G_ENB;
+//////////////// Add Sub ////////////////
+	wire [DATA_WIDTH-1:0] add_sub_data_in_A, 
+							add_sub_data_in_B, add_sub_data_out;		
+
+//////////////// Register ////////////////
+	wire [DATA_WIDTH-1:0] reg_A_data_in,reg_A_data_out,
+							reg_G_data_in, reg_G_data_out;
+	wire [DATA_WIDTH-1:0] register_data_in_list[REG_COUNT-1:0],
+							register_data_out_list[REG_COUNT-1:0];
+
+	// Flatten to pass
+	wire [DATA_WIDTH*REG_COUNT-1:0] f_register_data_out_list;
+
+
+//////////////// Misc ////////////////
+	wire [DATA_WIDTH-1:0] bus;
+
 ////////////////////////////////////////////////////////////////////////
-
-
-				
 	
+	// Register A/G connection
+	assign reg_A_data_in = bus;
+
+	// Register[] connection
+	generate
+		genvar i;
+		for (i = 0; i < REG_COUNT; i = i + 1) begin : register_wire_list
+			assign register_data_in_list[i] = bus;
+		end
+	endgenerate
+
+	// Add/Sub connection
+	assign add_sub_data_in_A = reg_A_data_out;
+	assign add_sub_data_in_B = bus;
+	assign reg_G_data_in = add_sub_data_out;
+
+
 	// Time step counter
-	Up_counter time_step (CLR, CLK, time_step_count);
+	Up_counter time_step (TIME_STEP_CLR, CLK, time_step_count);
 	
 	// IR register
-	Register_N #(.WIDTH(8)) reg_IR (IR_ENB, CLK, Din, instruction);
+	Register_N #(.WIDTH(8)) reg_IR (IR_ENB, CLK, din, instruction);
 	
-	// Parsing instruction
-	assign operation = instruction[7:6];
-	assign operand[1] = instruction[5:3];
-	assign operand[0] = instruction[2:0];
-	
-	// Decoding argument
-	Decode_3_8 dec_arg_0 (1'b1, operand[0], operand_reg[0]);
-	Decode_3_8 dec_arg_1 (1'b1, operand[1], operand_reg[1]);
-	
-	// Generate register[7:0]
 	generate
-	genvar i;
 		for (i = 0; i < REG_COUNT; i = i + 1) begin : register_array
-			Register_N #(.WIDTH(DATA_COUNT)) register_inst (
+			Register_N #(.WIDTH(DATA_WIDTH)) register_inst (
 				register_enable_list[i], 
 				CLK, 
-				Bus, 
-				register_data_list[i]);
+				register_data_in_list[i], 
+				register_data_out_list[i]);
 		end
 	endgenerate
 	
-	// Register A and G
-	Register_N #(.WIDTH(DATA_COUNT)) register_A (
-				regA_ENB, 
+	Register_N #(.WIDTH(DATA_WIDTH)) register_A (
+				REG_A_ENB, 
 				CLK, 
-				regA_data_in, 
-				regA_data_out);	
-	Register_N #(.WIDTH(DATA_COUNT)) register_G (
-				regG_ENB, 
+				reg_A_data_in, 
+				reg_A_data_out);	
+	Register_N #(.WIDTH(DATA_WIDTH)) register_G (
+				REG_G_ENB, 
 				CLK, 
-				regG_data_in, 
-				regG_data_out);	
+				reg_G_data_in, 
+				reg_G_data_out);
 				
-	// Add-Sub
 	LPM_add_sub_8 add_sub_inst (
 		ADD_SUB_SIG, 
-		add_sub_A, 
-		add_sub_B, 
-		add_sub_out);
-		
-////////////////////////////////////////////////////////////////////////		
-	always@(time_step_count, operand_reg[0], operand_reg[1]) begin
-		
-		
-	end
+		add_sub_data_in_A, 
+		add_sub_data_in_B, 
+		add_sub_data_out);
 
+	generate for (i = 0; i < REG_COUNT; i = i + 1) begin : F_RDO
+		assign f_register_data_out_list[DATA_WIDTH*i +: DATA_WIDTH] = 
+			register_data_out_list[i]; 
+	end endgenerate
+
+	Multiplxer Mux_0 (
+	din, 					// Input, data in
+	f_register_data_out_list,	// Input, register[] data
+	reg_G_data_out,			// Input, register G data
+
+	register_mux_sel_list, // Input, register[] select
+	DIN_MUX_SEL, G_MUX_SEL,	// Input, Din/G select
+
+	bus						// Output, bus
+	);
+
+	Control_Unit CU_0 (
+		RSTn, RUN_SIG, 							// Input, misc
+		instruction, 							// Input, instruction
+		time_step_count, 						// Input, time-step counter
+
+		IR_ENB,									// Output, IR register enable
+
+		DIN_MUX_SEL, G_MUX_SEL, 				// Output, mux
+		register_mux_sel_list, 					// Output, mux	
+
+		ADD_SUB_SIG,							// Output, add or sub selection
+		TIME_STEP_CLR,							// Output, time-step counter
+
+		register_enable_list,					// Output, register enables
+		REG_A_ENB, REG_G_ENB,					// Output, register enables
+
+		DONE_SIG								// Output, misc
+		);
 
 endmodule
