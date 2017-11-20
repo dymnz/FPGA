@@ -35,9 +35,6 @@ module LPM_RAM_SingleDual (CLOCK_50, SW, KEY, LEDR, HEX0, HEX1, HEX2, HEX3);
 	// OTHER
 	assign DFF_ADDR_ENB = RAM_CLK & SEL_ADDR;
 	assign DFF_DATA_ENB = RAM_CLK & ~SEL_ADDR;	
-	/*assign ram_address = 
-		(wr_address & {5{WRT_ENB}}) |
-		(rd_address & {5{~WRT_ENB}});*/
 	
 	One_hertz_module one_hertz (CLOCK_50, RST, CLK_1);
 	Count_32 count_0 (CLK_1, RST, rd_address);
@@ -55,16 +52,76 @@ module LPM_RAM_SingleDual (CLOCK_50, SW, KEY, LEDR, HEX0, HEX1, HEX2, HEX3);
 	Hex_7seg hex_3 ({3'b0, ram_address[4]}, HEX3);
 	
 	
-	// Race condition when WRT_ENB 0->1
-	// ram_address is still rd_address
-	always@(posedge RAM_CLK) begin
-		if (WRT_ENB) begin
-			ram_address = 5'b00111;
-			RAM_WRT_ENB = 1'b1;
-		end else begin
-			RAM_WRT_ENB = 1'b0;
-			ram_address = rd_address;
-		end
+	reg [3:0] current_state, next_state;
+	
+	// State table
+	parameter 
+		A = 4'b0000,
+		B = 4'b0001,		
+		C = 4'b0010,
+		D = 4'b0011;
+	
+	initial current_state = A;
+	initial next_state = A;
+	
+	always @(WRT_ENB, current_state) begin
+		case (current_state)
+		A: 
+			if (WRT_ENB) begin
+				next_state = B;
+			end else begin
+				next_state = A;
+			end	
+		B: 
+			if (WRT_ENB) begin
+				next_state = C;
+			end else begin
+				next_state = A;
+			end	
+		C: 
+			if (WRT_ENB) begin
+				next_state = C;
+			end else begin
+				next_state = D;
+			end		
+		D: 
+			if (WRT_ENB) begin
+				next_state = C;
+			end else begin
+				next_state = A;
+			end
+		default:
+			next_state = A;
+		endcase	
+	end
+		
+	always @(posedge RAM_CLK) begin
+		current_state = next_state;	
+	end
+	
+	always @(posedge RAM_CLK) begin
+		case (current_state)
+		A: begin
+			ram_address <= rd_address;
+			RAM_WRT_ENB <= 1'b0;
+			end
+		B: begin
+			ram_address <= wr_address;
+			RAM_WRT_ENB <= 1'b0;
+			end
+		C: begin
+			ram_address <= wr_address;
+			RAM_WRT_ENB <= 1'b1;
+			end
+		D: begin
+			ram_address <= wr_address;
+			RAM_WRT_ENB <= 1'b0;
+			end
+		default: begin
+			ram_address <= rd_address;
+			RAM_WRT_ENB <= 1'b0;
+			end
+		endcase	
 	end
 	
 	LPM_Single ram_0(ram_address, RAM_CLK, ram_data_in, RAM_WRT_ENB, data_out);
