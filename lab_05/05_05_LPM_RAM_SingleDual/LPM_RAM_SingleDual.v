@@ -64,7 +64,7 @@ module LPM_RAM_SingleDual (CLOCK_50, SW, KEY, LEDR, HEX0, HEX1, HEX2, HEX3);
 	initial current_state = A;
 	initial next_state = A;
 	
-	always @(WRT_ENB, current_state) begin
+	always @(posedge RAM_CLK) begin
 		case (current_state)
 		A: 
 			if (WRT_ENB) begin
@@ -73,25 +73,15 @@ module LPM_RAM_SingleDual (CLOCK_50, SW, KEY, LEDR, HEX0, HEX1, HEX2, HEX3);
 				next_state = A;
 			end	
 		B: 
-			if (WRT_ENB) begin
-				next_state = C;
-			end else begin
-				next_state = A;
-			end	
+			next_state = C;
 		C: 
-			if (WRT_ENB) begin
-				next_state = C;
-			end else begin
-				next_state = D;
-			end		
+			next_state = D;	
 		D: 
 			if (WRT_ENB) begin
-				next_state = C;
+				next_state = D;
 			end else begin
 				next_state = A;
 			end
-		default:
-			next_state = A;
 		endcase	
 	end
 		
@@ -102,24 +92,20 @@ module LPM_RAM_SingleDual (CLOCK_50, SW, KEY, LEDR, HEX0, HEX1, HEX2, HEX3);
 	always @(posedge RAM_CLK) begin
 		case (current_state)
 		A: begin
-			ram_address <= rd_address;
-			RAM_WRT_ENB <= 1'b0;
+			ram_address = rd_address;
+			RAM_WRT_ENB = 1'b0;
 			end
 		B: begin
-			ram_address <= wr_address;
-			RAM_WRT_ENB <= 1'b0;
+			ram_address = wr_address;
+			RAM_WRT_ENB = 1'b0;
 			end
 		C: begin
-			ram_address <= wr_address;
-			RAM_WRT_ENB <= 1'b1;
+			ram_address = wr_address;
+			RAM_WRT_ENB = 1'b1;
 			end
 		D: begin
-			ram_address <= wr_address;
-			RAM_WRT_ENB <= 1'b0;
-			end
-		default: begin
-			ram_address <= rd_address;
-			RAM_WRT_ENB <= 1'b0;
+			ram_address = wr_address;
+			RAM_WRT_ENB = 1'b0;
 			end
 		endcase	
 	end

@@ -137,11 +137,11 @@ module Control_Unit (
 			ADD: begin
 				REG_MUX_SEL = 1;
 				register_mux_sel_list = operand[0];
-				REG_G_ENB = 1;				
+				REG_G_ENB = 1;
 			end
 			SUB: begin
 				REG_MUX_SEL = 1;
-				register_mux_sel_list = operand[1];
+				register_mux_sel_list = operand[0];
 				REG_G_ENB = 1;
 				ADD_SUB_SIG = 0;
 			end
@@ -155,11 +155,15 @@ module Control_Unit (
 			case (operation)
 			ADD: begin
 				G_MUX_SEL = 1;
-				register_enable_list = operand_enable[1];				
+				register_enable_list = operand_enable[1];
+				DONE_SIG = 1;
+				TIME_STEP_CLR = 1;				
 			end
 			SUB: begin
 				G_MUX_SEL = 1;
 				register_enable_list = operand_enable[1];
+				DONE_SIG = 1;
+				TIME_STEP_CLR = 1;
 			end
 			default: begin
 				;

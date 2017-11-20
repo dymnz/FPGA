@@ -15,9 +15,9 @@ module Multiplxer (
 
 	input [DATA_WIDTH-1:0] din;
 	input [DATA_WIDTH*REG_COUNT-1:0] f_register_data_out_list;	
-	input [REG_COUNT_BIT_WIDTH-1:0] reg_G_data_out;
+	input [DATA_WIDTH-1:0] reg_G_data_out;
 
-	input [REG_COUNT-1:0] register_mux_sel_list;
+	input [REG_COUNT_BIT_WIDTH-1:0] register_mux_sel_list;
 	input DIN_MUX_SEL, G_MUX_SEL, REG_MUX_SEL;
 
 	output reg [DATA_WIDTH-1:0] bus;
