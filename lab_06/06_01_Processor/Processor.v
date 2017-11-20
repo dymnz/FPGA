@@ -15,7 +15,7 @@ module Processor (din, RSTn, CLK, RUN_SIG, DONE_SIG);
 
 	wire IR_ENB;
 
-	wire DIN_MUX_SEL, G_MUX_SEL;
+	wire DIN_MUX_SEL, G_MUX_SEL, REG_MUX_SEL;
 	wire [REG_COUNT_BIT_WIDTH-1:0] register_mux_sel_list;	// Mux->Bus data sel
 
 	wire ADD_SUB_SIG;
@@ -103,7 +103,7 @@ module Processor (din, RSTn, CLK, RUN_SIG, DONE_SIG);
 	reg_G_data_out,			// Input, register G data
 
 	register_mux_sel_list, // Input, register[] select
-	DIN_MUX_SEL, G_MUX_SEL,	// Input, Din/G select
+	DIN_MUX_SEL, G_MUX_SEL,	REG_MUX_SEL, // Input, Din/G/REG select
 
 	bus						// Output, bus
 	);
@@ -116,6 +116,7 @@ module Processor (din, RSTn, CLK, RUN_SIG, DONE_SIG);
 		IR_ENB,									// Output, IR register enable
 
 		DIN_MUX_SEL, G_MUX_SEL, 				// Output, mux
+		REG_MUX_SEL,								// Output, reg mux enable
 		register_mux_sel_list, 					// Output, mux	
 
 		ADD_SUB_SIG,							// Output, add or sub selection

@@ -6,7 +6,8 @@ module Control_Unit (
 	IR_ENB,									// Output, IR register enable
 
 	DIN_MUX_SEL, G_MUX_SEL, 				// Output, mux
-	register_mux_sel_list, 					// Output, mux	
+	REG_MUX_SEL,								// Output, reg mux enable
+	register_mux_sel_list, 					// Output, reg mux select
 
 	ADD_SUB_SIG,							// Output, add or sub selection
 	TIME_STEP_CLR,							// Output, time-step counter
@@ -29,7 +30,7 @@ module Control_Unit (
 
 	output reg IR_ENB;
 
-	output reg DIN_MUX_SEL, G_MUX_SEL;
+	output reg DIN_MUX_SEL, G_MUX_SEL, REG_MUX_SEL;
 	output reg [REG_COUNT_BIT_WIDTH-1:0] register_mux_sel_list;	// Mux->Bus data sel
 
 	output reg ADD_SUB_SIG;
@@ -38,7 +39,7 @@ module Control_Unit (
 	output reg [REG_COUNT-1:0] register_enable_list;
 	output reg REG_A_ENB, REG_G_ENB;
 
-	output reg DONE_SIG;	
+	output reg DONE_SIG;
 ////////////////////////////////////////////////////////////////////////	
 	
 	wire [1:0] operation;
@@ -102,6 +103,7 @@ module Control_Unit (
 		2'b01: begin
 			case (operation)
 			MOV: begin
+				REG_MUX_SEL = 1;
 				register_mux_sel_list = operand[0];
 				register_enable_list = operand_enable[1];
 
@@ -116,10 +118,12 @@ module Control_Unit (
 				TIME_STEP_CLR = 1;
 			end
 			ADD: begin
+				REG_MUX_SEL = 1;
 				register_mux_sel_list = operand[1];
 				REG_A_ENB = 1;
 			end
 			SUB: begin
+				REG_MUX_SEL = 1;
 				register_mux_sel_list = operand[1];
 				REG_A_ENB = 1;
 			end
@@ -129,10 +133,12 @@ module Control_Unit (
 		2'b10: begin
 			case (operation)
 			ADD: begin
+				REG_MUX_SEL = 1;
 				register_mux_sel_list = operand[0];
 				REG_G_ENB = 1;				
 			end
 			SUB: begin
+				REG_MUX_SEL = 1;
 				register_mux_sel_list = operand[1];
 				REG_G_ENB = 1;
 				ADD_SUB_SIG = 0;

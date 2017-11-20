@@ -4,7 +4,7 @@ module Multiplxer (
 	reg_G_data_out,			// Input, register G data
 
 	register_mux_sel_list, // Input, register[] select
-	DIN_MUX_SEL, G_MUX_SEL,	// Input, Din/G select
+	DIN_MUX_SEL, G_MUX_SEL,	REG_MUX_SEL, // Input, Din/G/REG select
 
 	bus						// Output, bus
 	);
@@ -18,7 +18,7 @@ module Multiplxer (
 	input [REG_COUNT_BIT_WIDTH-1:0] reg_G_data_out;
 
 	input [REG_COUNT-1:0] register_mux_sel_list;
-	input DIN_MUX_SEL, G_MUX_SEL;
+	input DIN_MUX_SEL, G_MUX_SEL, REG_MUX_SEL;
 
 	output reg [DATA_WIDTH-1:0] bus;
 
@@ -34,8 +34,9 @@ module Multiplxer (
 			register_mux_sel_list, 
 			DIN_MUX_SEL, 
 			G_MUX_SEL,
+			REG_MUX_SEL, 
 			din, reg_G_data_out) begin
-		if (register_mux_sel_list) begin
+		if (REG_MUX_SEL) begin
 			bus = register_data_out_list[register_mux_sel_list];
 		end else if (DIN_MUX_SEL) begin
 			bus = din;				
