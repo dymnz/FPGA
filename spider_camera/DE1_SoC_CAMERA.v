@@ -245,6 +245,7 @@ wire	       [9:0]			oVGA_B;   				//	VGA Blue[9:0]
 
 /* TEMP TODO:remove */
 wire [10:0] X_COR, Y_COR;
+wire [23:0] Count;
 wire track;
 //power on start
 wire             				auto_start;
@@ -313,9 +314,10 @@ RAW2RGB				u4	(
 							.oDVAL(sCCD_DVAL),
 							.iX_Cont(X_Cont),
 							.iY_Cont(Y_Cont),
-                                          .X_COR(X_COR),
-                                          .Y_COR(Y_COR),
-														.track(track)
+							.X_COR(X_COR),
+							.Y_COR(Y_COR),
+							.tracked(track),
+							.Count(Count)
 						   );
 
 //Frame count display
@@ -323,7 +325,7 @@ SEG7_LUT_6 			u5	(
 							.oSEG0(HEX0),.oSEG1(HEX1),
 							.oSEG2(HEX2),.oSEG3(HEX3),
 							.oSEG4(HEX4),.oSEG5(HEX5),
-							.iDIG({1'b0, Y_COR, 1'b0, X_COR})
+							.iDIG(Count)
 						   );
 												
 sdram_pll 			u6	(

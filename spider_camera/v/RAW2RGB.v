@@ -53,7 +53,8 @@ module RAW2RGB(
 	iRST,
 	X_COR,
 	Y_COR,
-	track
+	tracked,
+	Count
 );
 
 input	[10:0]	iX_Cont;
@@ -76,14 +77,21 @@ reg		[11:0]	mCCD_B;
 reg				mDVAL;
 
 output reg [10:0]	X_COR;    //輸出X座標
-output reg [10:0]	Y_COR;    //輸出Y座標]
-output reg track;
+output reg [10:0]	Y_COR;    //輸出Y座標
+output reg [23:0] Count;
+output reg tracked;
 
+
+reg [23:0] buffered_count;
 reg [10:0] last_x, last_y;
+reg updated;
 
 initial begin
 	last_x=11'b0;
 	last_y=11'b0;
+	updated = 1'b0;
+	Count = 0;
+	buffered_count = 0;
 end
 
 
@@ -144,17 +152,18 @@ end
 
 //判斷紅光座標
 always @(posedge iCLK or negedge iRST) begin
-	if(!iRST) 
-	begin
+	if(!iRST) begin
 		X_COR <= 0;
 		Y_COR <= 0;
+	end 
+	else if (updated && iX_Cont==0 && iY_Cont==0) begin
+		updated <= 0;
 	end
-	else	
-		if(mCCD_G>7500) 
-			begin /* && mCCD_G<500 && mCCD_B<500*/
-				X_COR <= iX_Cont;
-				Y_COR <= iY_Cont;
-		end
+	else if(mCCD_G>7500 && !updated) begin /* && mCCD_G<500 && mCCD_B<500*/
+		X_COR <= iX_Cont;
+		Y_COR <= iY_Cont;
+		updated <= 1;
+	end
   
 end
 
@@ -162,16 +171,31 @@ end
 always@(posedge iCLK)
 begin
 
-	if(iX_Cont==last_x && iY_Cont==last_y && mCCD_G<7500)
-		track <= 1'b0;
-		
-	else if(mCCD_G>7500)
-		begin
-		track <= 1'b1;
+	if(iX_Cont==last_x && iY_Cont==last_y && mCCD_G<7500) begin
+		tracked <= 1'b0;
+	end 
+	else if(mCCD_G>7500) begin
+		tracked <= 1'b1;
 		last_x <= iX_Cont;
 		last_y <= iY_Cont;
-		end
+	end
 
+end
+
+always@(posedge iCLK)
+begin
+
+	if(iX_Cont==1 && iY_Cont==0) begin	
+		buffered_count	<= 0;
+	end 
+	else if(mCCD_G>7500) begin
+		buffered_count <= buffered_count + 1;
+	end
+
+	if (iX_Cont==0 && iY_Cont==0) begin
+		Count <= buffered_count;
+	end
+	
 end
 
 
