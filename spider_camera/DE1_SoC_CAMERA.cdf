@@ -1,12 +1,12 @@
-/* Quartus II 64-Bit Version 13.1.4 Build 182 03/12/2014 SJ Full Version */
+/* Quartus II 64-Bit Version 13.1.0 Build 162 10/23/2013 SJ Web Edition */
 JedecChain;
 	FileRevision(JESD32A);
 	DefaultMfr(6E);
 
 	P ActionCode(Ign)
-		Device PartName(5CSEMA5F31) MfrSpec(OpMask(0) FullPath("D:/Qsync/fpga_workspace/DE1_SoC_CAMERA/DE1_SoC_CAMERA.sof"));
+		Device PartName(SOCVHPS) MfrSpec(OpMask(0));
 	P ActionCode(Cfg)
-		Device PartName(5CSEMA5F31) Path("D:/Qsync/fpga_workspace/DE1_SoC_CAMERA/") File("DE1_SoC_CAMERA.sof") MfrSpec(OpMask(1));
+		Device PartName(5CSEMA5F31) Path("C:/Users/Dymnz/Desktop/FPGA/spider_camera/") File("DE1_SoC_CAMERA.sof") MfrSpec(OpMask(1));
 
 ChainEnd;
 

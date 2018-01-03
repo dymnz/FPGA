@@ -52,7 +52,8 @@ module RAW2RGB(
 	iCLK,
 	iRST,
 	X_COR,
-	Y_COR
+	Y_COR,
+	track
 );
 
 input	[10:0]	iX_Cont;
@@ -74,10 +75,16 @@ reg		[12:0]	mCCD_G;
 reg		[11:0]	mCCD_B;
 reg				mDVAL;
 
-output	[10:0]	X_COR;    //輸出X座標
-output	[10:0]	Y_COR;    //輸出Y座標
+output reg [10:0]	X_COR;    //輸出X座標
+output reg [10:0]	Y_COR;    //輸出Y座標]
+output reg track;
 
+reg [10:0] last_x, last_y;
 
+initial begin
+	last_x=11'b0;
+	last_y=11'b0;
+end
 
 
 
@@ -137,19 +144,36 @@ end
 
 //判斷紅光座標
 always @(posedge iCLK or negedge iRST) begin
-	if(!iRST) begin
+	if(!iRST) 
+	begin
 		X_COR <= 0;
 		Y_COR <= 0;
-	end	
-	if(mCCD_R>7500 && mCCD_G<500 && mCCD_B<500) begin
-		X_COR <= iX_Cont;
-		Y_COR <= iY_Cont;
 	end
-	else begin
-		X_COR <= X_COR;
-		Y_COR <= Y_COR;	
-	end
+	else	
+		if(mCCD_G>7500) 
+			begin /* && mCCD_G<500 && mCCD_B<500*/
+				X_COR <= iX_Cont;
+				Y_COR <= iY_Cont;
+		end
+  
 end
+
+
+always@(posedge iCLK)
+begin
+
+	if(iX_Cont==last_x && iY_Cont==last_y && mCCD_G<7500)
+		track <= 1'b0;
+		
+	else if(mCCD_G>7500)
+		begin
+		track <= 1'b1;
+		last_x <= iX_Cont;
+		last_y <= iY_Cont;
+		end
+
+end
+
 
 endmodule
 

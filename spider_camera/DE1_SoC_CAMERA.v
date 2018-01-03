@@ -245,7 +245,7 @@ wire	       [9:0]			oVGA_B;   				//	VGA Blue[9:0]
 
 /* TEMP TODO:remove */
 wire [10:0] X_COR, Y_COR;
-
+wire track;
 //power on start
 wire             				auto_start;
 //=======================================================
@@ -257,8 +257,8 @@ assign	D5M_RESET_N	=	DLY_RST_1;
 
 assign   VGA_CTRL_CLK = VGA_CLK;
 
-assign	LEDR		=	Y_Cont;
-
+//assign	LEDR		=	Y_Cont;
+assign LEDR[9]=track;
 //fetch the high 8 bits
 assign  VGA_R = oVGA_R[9:2];
 assign  VGA_G = oVGA_G[9:2];
@@ -314,7 +314,8 @@ RAW2RGB				u4	(
 							.iX_Cont(X_Cont),
 							.iY_Cont(Y_Cont),
                                           .X_COR(X_COR),
-                                          .Y_COR(Y_COR)
+                                          .Y_COR(Y_COR),
+														.track(track)
 						   );
 
 //Frame count display
