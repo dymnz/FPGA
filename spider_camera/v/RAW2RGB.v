@@ -40,21 +40,20 @@
 //   V1.0 :| Johnny Fan        :| 07/08/01  :|      Initial Revision
 // --------------------------------------------------------------------
 
-module RAW2RGB(	oRed,
-				oGreen,
-				oBlue,
-				oDVAL,
-				iX_Cont,
-				iY_Cont,
-				
-				X_COR,
-				Y_COR,
-				
-				iDATA,
-				iDVAL,
-				iCLK,
-				iRST
-				);
+module RAW2RGB(	
+	oRed,
+	oGreen,
+	oBlue,
+	oDVAL,
+	iX_Cont,
+	iY_Cont,				
+	iDATA,
+	iDVAL,
+	iCLK,
+	iRST,
+	X_COR,
+	Y_COR
+);
 
 input	[10:0]	iX_Cont;
 input	[10:0]	iY_Cont;
