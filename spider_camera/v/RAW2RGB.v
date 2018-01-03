@@ -136,35 +136,21 @@ begin
 	end
 end
 
-
-
-
 //判斷紅光座標
-always@(posedge iCLK or negedge iRST)
-begin
-		if(!iRST)
-	begin
-		X_COR    <= 0;
-		Y_COR    <= 0;
+always @(posedge iCLK or negedge iRST) begin
+	if(!iRST) begin
+		X_COR <= 0;
+		Y_COR <= 0;
 	end	
-	
-
-	if(mCCD_R>7500 && mCCD_G<500 && mCCD_B<500)
-	begin
+	if(mCCD_R>7500 && mCCD_G<500 && mCCD_B<500) begin
 		X_COR <= iX_Cont;
 		Y_COR <= iY_Cont;
 	end
-	else
-	begin
+	else begin
 		X_COR <= X_COR;
 		Y_COR <= Y_COR;	
 	end
-
 end
-
-
-
-
 
 endmodule
 
