@@ -46,6 +46,10 @@ module RAW2RGB(	oRed,
 				oDVAL,
 				iX_Cont,
 				iY_Cont,
+				
+				X_COR,
+				Y_COR,
+				
 				iDATA,
 				iDVAL,
 				iCLK,
@@ -70,6 +74,13 @@ reg		[11:0]	mCCD_R;
 reg		[12:0]	mCCD_G;
 reg		[11:0]	mCCD_B;
 reg				mDVAL;
+
+output	[10:0]	X_COR;    //輸出X座標
+output	[10:0]	Y_COR;    //輸出Y座標
+
+
+
+
 
 assign	oRed	=	mCCD_R[11:0];
 assign	oGreen	=	mCCD_G[12:1];
@@ -124,6 +135,36 @@ begin
 		end
 	end
 end
+
+
+
+
+//判斷紅光座標
+always@(posedge iCLK or negedge iRST)
+begin
+		if(!iRST)
+	begin
+		X_COR    <= 0;
+		Y_COR    <= 0;
+	end	
+	
+
+	if(mCCD_R>7500 && mCCD_G<500 && mCCD_B<500)
+	begin
+		X_COR <= iX_Cont;
+		Y_COR <= iY_Cont;
+	end
+	else
+	begin
+		X_COR <= X_COR;
+		Y_COR <= Y_COR;	
+	end
+
+end
+
+
+
+
 
 endmodule
 
