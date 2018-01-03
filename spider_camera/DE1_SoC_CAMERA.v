@@ -325,7 +325,7 @@ SEG7_LUT_6 			u5	(
 							.oSEG0(HEX0),.oSEG1(HEX1),
 							.oSEG2(HEX2),.oSEG3(HEX3),
 							.oSEG4(HEX4),.oSEG5(HEX5),
-							.iDIG(Count)
+							.iDIG({1'b0, Y_COR, 1'b0, X_COR})
 						   );
 												
 sdram_pll 			u6	(
